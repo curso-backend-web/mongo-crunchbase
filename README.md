@@ -10,7 +10,7 @@ __Crunchbase__ es el lugar de referencia para descubrir tendencias en la industr
 
 ## Consultas a Crunchbase
 
-Dentro de la carpeta de _starter-code_ se encuentra el fichero __crunchdatabase__.
+Utiliza el fichero __crunchdatabase__.
 
 ## Ejercicio
 
