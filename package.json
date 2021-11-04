@@ -1,0 +1,24 @@
+{
+  "name": "mongo-crunchbase",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "![](https://i.imgur.com/FqGd9jz.jpg)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curso-backend-web/mongo-crunchbase.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/curso-backend-web/mongo-crunchbase/issues"
+  },
+  "homepage": "https://github.com/curso-backend-web/mongo-crunchbase#readme",
+  "dependencies": {
+    "mongodb": "^4.1.4"
+  }
+}
