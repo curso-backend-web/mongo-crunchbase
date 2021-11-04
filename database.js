@@ -6,13 +6,13 @@ import config from './config.js';
 class MongoManager {
     constructor(config){
         this.url = config.urlDatabase;
-        this._connect();
+        this._connect(config.db);
     }
-    async _connect(){
+    async _connect(db){
         try {
             this.client = new MongoClient(this.url,{useNewUrlParser:true});
             this.client.connect();
-
+            this.db = this.client.db(db);
         } catch (error) {
             this._dropConnection();
             throw error;
@@ -27,7 +27,7 @@ class MongoManager {
 
     async insertOne(collectionName, data){
         try {
-            const result = await this.client.db().collection(collectionName)
+            const result = await this.db.collection(collectionName)
                                                 .insertOne(data);
             this._dropConnection();
             return result;
@@ -38,7 +38,7 @@ class MongoManager {
     }
     async insertMany(collectionName,data){
         try {
-            const result = await this.client.db().collection(collectionName)
+            const result = await this.db.collection(collectionName)
                                         .insertMany(data);
             this._dropConnection();
             return result;
@@ -49,7 +49,7 @@ class MongoManager {
     }
     async find(collectionName,query){
         try {
-            const result = await this.client.db().collection(collectionName)
+            const result = await this.db.collection(collectionName)
                                          .find(query)
                                          .limit(10)
                                          .toArray();
@@ -62,7 +62,7 @@ class MongoManager {
     }
     async updateOne(collectionName,query,data){
         try {
-            const result = await this.client.db().collection(collectionName)
+            const result = await this.db.collection(collectionName)
                         .updateOne(query,data)
 
             this._dropConnection();
@@ -75,7 +75,7 @@ class MongoManager {
     }
     async removeOne(collectionName, query){
         try {
-            const result = await this.client.db().collection(collectionName)
+            const result = await this.db.collection(collectionName)
                                                 .removeOne(query);
             this._dropConnection();
             return result;
