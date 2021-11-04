@@ -54,7 +54,7 @@ class MongoManager {
                                          .project(projection)
                                         //  .limit(10)
                                          .toArray();
-            this._dropConnection();                            
+            // this._dropConnection();                            
             return result;
         } catch (error) {
             throw error;

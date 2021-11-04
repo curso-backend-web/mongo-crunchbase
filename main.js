@@ -1,6 +1,7 @@
 import connection from './database.js';
 import queries from './queries.js';
-import * as readline from 'node:readline/promises';
+import readline from 'readline';
+import clear from 'clear';
 import { stdin as input, stdout as output } from 'process';
 
 const rl = readline.createInterface({ input, output });
@@ -36,7 +37,7 @@ const mainMenu = () => {
         case "1":
           console.log('you typed 1');
           try {
-              const result = await connection.find('companies',queries[option])
+              const result = await connection.find('companies',...queries[option])
               console.log(result);
               rl.question(`\nType enter to continue: `, answer => mainMenu());
               break;
@@ -61,8 +62,9 @@ const mainMenu = () => {
         }
         case "0":
           console.log(`👋👋👋👋 😞 \n`);
-          db.close((error) => { process.exit(0) });
-          break;
+          await connection._dropConnection();
+          process.exit(0);
+
         default:
           mainMenu();
           break;
@@ -70,4 +72,4 @@ const mainMenu = () => {
     })
 }
 
-
+mainMenu();
