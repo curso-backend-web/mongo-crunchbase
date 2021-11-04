@@ -1,20 +1,20 @@
 import {MongoClient} from 'mongodb';
 import config from './config.js';
 
+
+
 class MongoManager {
-    constructor(configData){
-       console.log(configData)
-       this.client = new MongoClient(configData.urlDatabase,{useNewUrlParser: true});
-        this._createConnection(configData);
-        //     {useNewUrlParser: true})
-        // this._createConnection(configData.db);
+    constructor(config){
+        this.url = config.urlDatabase;
+        this._connect();
     }
-    async _createConnection(configData){
+    async _connect(){
         try {
-            // this.client = await MongoClient.connect(configData.urlDatabase);
-            this.db = await this.client.db(configData.db);
-            console.log(this.db)
+            this.client = new MongoClient(this.url,{useNewUrlParser:true});
+            this.client.connect();
+
         } catch (error) {
+            this._dropConnection();
             throw error;
 
         }
@@ -23,9 +23,12 @@ class MongoManager {
         this.client.close();
     }
 
+
+
     async insertOne(collectionName, data){
         try {
-            const result = await this.db.collection(collectionName).insertOne(data);
+            const result = await this.client.db().collection(collectionName)
+                                                .insertOne(data);
             this._dropConnection();
             return result;
         } catch (error) {
@@ -35,7 +38,8 @@ class MongoManager {
     }
     async insertMany(collectionName,data){
         try {
-            const result = await this.db.collection(collectionName).insertMany(data);
+            const result = await this.client.db().collection(collectionName)
+                                        .insertMany(data);
             this._dropConnection();
             return result;
         } catch (error) {
@@ -45,9 +49,10 @@ class MongoManager {
     }
     async find(collectionName,query){
         try {
-            const result = await this.db.collection(collectionName)
-                                        .find(query)
-                                        .toArray();
+            const result = await this.client.db().collection(collectionName)
+                                         .find(query)
+                                         .limit(10)
+                                         .toArray();
             this._dropConnection();                            
             return result;
         } catch (error) {
@@ -57,9 +62,8 @@ class MongoManager {
     }
     async updateOne(collectionName,query,data){
         try {
-            const result = await this.db.collection(collectionName).updateOne(
-                query,data
-            )
+            const result = await this.client.db().collection(collectionName)
+                        .updateOne(query,data)
 
             this._dropConnection();
 
@@ -71,7 +75,8 @@ class MongoManager {
     }
     async removeOne(collectionName, query){
         try {
-            const result = await this.db.collection(collectionName).removeOne(query);
+            const result = await this.client.db().collection(collectionName)
+                                                .removeOne(query);
             this._dropConnection();
             return result;
         } catch (error) {
@@ -82,4 +87,4 @@ class MongoManager {
     
 }
 
-export default new MongoManager(config);
+ export default new MongoManager(config);
