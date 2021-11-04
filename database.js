@@ -14,78 +14,25 @@ class MongoManager {
             this.client.connect();
             this.db = this.client.db(db);
         } catch (error) {
-            this._dropConnection();
+            this.close();
             throw error;
 
         }
     }
-    async _dropConnection(){
+    async close(){
         this.client.close();
     }
 
-
-
-    async insertOne(collectionName, data){
+    async query(params){
         try {
-            const result = await this.db.collection(collectionName)
-                                                .insertOne(data);
-            this._dropConnection();
-            return result;
+          return  this.db.executeDbCommand(params);
         } catch (error) {
+            this.close();
             throw error;
             
         }
     }
-    async insertMany(collectionName,data){
-        try {
-            const result = await this.db.collection(collectionName)
-                                        .insertMany(data);
-            this._dropConnection();
-            return result;
-        } catch (error) {
-            throw error;
-            
-        }
-    }
-    async find(collectionName,query,projection){
-        try {
-            const result = await this.db.collection(collectionName)
-                                         .find(query)
-                                         .project(projection)
-                                        //  .limit(10)
-                                         .toArray();
-            // this._dropConnection();                            
-            return result;
-        } catch (error) {
-            throw error;
-            
-        }
-    }
-    async updateOne(collectionName,query,data){
-        try {
-            const result = await this.db.collection(collectionName)
-                        .updateOne(query,data)
-
-            this._dropConnection();
-
-            return result;
-        } catch (error) {
-            throw error;
-            
-        }
-    }
-    async removeOne(collectionName, query){
-        try {
-            const result = await this.db.collection(collectionName)
-                                                .removeOne(query);
-            this._dropConnection();
-            return result;
-        } catch (error) {
-            throw error;
-            
-        }
-    }
-    
 }
 
- export default new MongoManager(config);
+export default new MongoManager(config);;
+ 

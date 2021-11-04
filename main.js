@@ -6,8 +6,8 @@ import { stdin as input, stdout as output } from 'process';
 
 const rl = readline.createInterface({ input, output });
 
-const printMenu = ()=>{
-    console.log(`
+const printMenu = () => {
+  console.log(`
   0.- Exit
   1.- List by name all companies.
   2.- How many companies are there?
@@ -28,48 +28,32 @@ const printMenu = ()=>{
   17.- Names and locations of companies that have offices in London
   18.- How many companies that has "social-network" in tag-list and founded between 2002 and 2016 inclusive and has offices in New York
   `);
-  }
-const mainMenu = () => {
-    clear();
-    printMenu();
-    rl.question('Type an option: ', async (option) => {
-      switch(option){
-        case "1":
-          console.log('you typed 1');
-          try {
-              const result = await connection.find('companies',...queries[option])
-              console.log(result);
-              rl.question(`\nType enter to continue: `, answer => mainMenu());
-              break;
-              
-          } catch (error) {
-              console.log(error);
-              rl.question(`\nType enter to continue: `, (answer) => {mainMenu()});
-              break;          
-          }
-        case "2":
-          console.log('you typed 2');
-          try {
-            const result = await connection.find('companies',queries[option])
-            console.log(result);
-            rl.question(`\nType enter to continue: `, answer => mainMenu());
-            break;
-            
-        } catch (error) {
-            console.log(error);
-            rl.question(`\nType enter to continue: `, (answer) => {mainMenu()});
-            break;          
-        }
-        case "0":
-          console.log(`👋👋👋👋 😞 \n`);
-          await connection._dropConnection();
-          process.exit(0);
-
-        default:
-          mainMenu();
-          break;
-      }
-    })
 }
+const mainMenu = () => {
+  clear();
+  printMenu();
+  rl.question('Type an option: ', async (option) => {
+    if (!option) {
+      console.log(`👋👋👋👋 😞 \n`);
+      await connection._dropConnection();
+      process.exit(0);
+    } else {
+      console.log(`you typed ${option}`);
+      try {
+        const result = await connection.query('companies', queries[option])
+        console.log(result);
+        rl.question(`\nType enter to continue: `, answer => mainMenu());
+
+
+      } catch (error) {
+        console.log(error);
+        rl.question(`\nType enter to continue: `, (answer) => { mainMenu() });
+
+      }
+    }
+  })
+}
+
+
 
 mainMenu();
