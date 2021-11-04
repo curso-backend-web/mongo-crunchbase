@@ -47,11 +47,12 @@ class MongoManager {
             
         }
     }
-    async find(collectionName,query){
+    async find(collectionName,query,projection){
         try {
             const result = await this.db.collection(collectionName)
                                          .find(query)
-                                         .limit(10)
+                                         .project(projection)
+                                        //  .limit(10)
                                          .toArray();
             this._dropConnection();                            
             return result;

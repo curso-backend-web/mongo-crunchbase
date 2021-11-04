@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/curso-backend-web/mongo-crunchbase#readme",
   "dependencies": {
+    "clear": "^0.1.0",
     "mongodb": "^4.1.4"
   }
 }
