@@ -35,20 +35,19 @@ const mainMenu = () => {
   rl.question('Type an option: ', async (option) => {
     if (!option) {
       console.log(`👋👋👋👋 😞 \n`);
-      await connection._dropConnection();
+      await connection.close();
       process.exit(0);
     } else {
       console.log(`you typed ${option}`);
       try {
         const result = await connection.query('companies', queries[option])
         console.log(result);
-        rl.question(`\nType enter to continue: `, answer => mainMenu());
-
 
       } catch (error) {
         console.log(error);
-        rl.question(`\nType enter to continue: `, (answer) => { mainMenu() });
 
+      } finally {
+        rl.question(`\nType enter to continue: `, (answer) => { mainMenu() });
       }
     }
   })

@@ -23,9 +23,12 @@ class MongoManager {
         this.client.close();
     }
 
-    async query(params){
+    async query(collectionName,query){
         try {
-          return  this.db.executeDbCommand(params);
+          const result = await this.db.collection(collectionName)
+                                    .aggregate(query).toArray();
+
+          return result;
         } catch (error) {
             this.close();
             throw error;
